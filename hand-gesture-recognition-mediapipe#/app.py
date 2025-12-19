@@ -13,7 +13,7 @@ import mediapipe as mp
 
 from utils import CvFpsCalc
 from model import KeyPointClassifier
-from model import PointHistoryClassifier
+#from model import PointHistoryClassifier
 
 
 def get_args():
@@ -68,7 +68,7 @@ def main():
 
     keypoint_classifier = KeyPointClassifier()
 
-    point_history_classifier = PointHistoryClassifier()
+    #point_history_classifier = PointHistoryClassifier()
 
     # Read labels ###########################################################
     with open('model/keypoint_classifier/keypoint_classifier_label.csv',
@@ -77,23 +77,25 @@ def main():
         keypoint_classifier_labels = [
             row[0] for row in keypoint_classifier_labels
         ]
-    with open(
-            'model/point_history_classifier/point_history_classifier_label.csv',
-            encoding='utf-8-sig') as f:
-        point_history_classifier_labels = csv.reader(f)
-        point_history_classifier_labels = [
-            row[0] for row in point_history_classifier_labels
-        ]
+
+    # with open(
+    #         'model/point_history_classifier/point_history_classifier_label.csv',
+    #         encoding='utf-8-sig') as f:
+    #     point_history_classifier_labels = csv.reader(f)
+    #     point_history_classifier_labels = [
+    #         row[0] for row in point_history_classifier_labels
+    #     ]
+
 
     # FPS Measurement ########################################################
     cvFpsCalc = CvFpsCalc(buffer_len=10)
 
     # Coordinate history #################################################################
-    history_length = 16
-    point_history = deque(maxlen=history_length)
+    #history_length = 16
+    #point_history = deque(maxlen=history_length)
 
     # Finger gesture history ################################################
-    finger_gesture_history = deque(maxlen=history_length)
+    #finger_gesture_history = deque(maxlen=history_length)
 
     #  ########################################################################
     mode = 0
@@ -133,30 +135,30 @@ def main():
                 # Conversion to relative coordinates / normalized coordinates
                 pre_processed_landmark_list = pre_process_landmark(
                     landmark_list)
-                pre_processed_point_history_list = pre_process_point_history(
-                    debug_image, point_history)
+                #pre_processed_point_history_list = pre_process_point_history(
+                #    debug_image, point_history)
                 # Write to the dataset file
-                logging_csv(number, mode, pre_processed_landmark_list,
-                            pre_processed_point_history_list)
+                #logging_csv(number, mode, pre_processed_landmark_list,
+                #            pre_processed_point_history_list)
 
                 # Hand sign classification
                 hand_sign_id = keypoint_classifier(pre_processed_landmark_list)
-                if hand_sign_id == 2:  # Point gesture
-                    point_history.append(landmark_list[8])
-                else:
-                    point_history.append([0, 0])
+                #if hand_sign_id == 2:  # Point gesture
+                #    point_history.append(landmark_list[8])
+                #else:
+                #    point_history.append([0, 0])
 
                 # Finger gesture classification
-                finger_gesture_id = 0
+                """finger_gesture_id = 0
                 point_history_len = len(pre_processed_point_history_list)
                 if point_history_len == (history_length * 2):
                     finger_gesture_id = point_history_classifier(
-                        pre_processed_point_history_list)
+                        pre_processed_point_history_list)"""
 
                 # Calculates the gesture IDs in the latest detection
-                finger_gesture_history.append(finger_gesture_id)
+                """finger_gesture_history.append(finger_gesture_id)
                 most_common_fg_id = Counter(
-                    finger_gesture_history).most_common()
+                    finger_gesture_history).most_common()"""
 
                 # Drawing part
                 debug_image = draw_bounding_rect(use_brect, debug_image, brect)
@@ -166,12 +168,12 @@ def main():
                     brect,
                     handedness,
                     keypoint_classifier_labels[hand_sign_id],
-                    point_history_classifier_labels[most_common_fg_id[0][0]],
+                    "",
                 )
-        else:
-            point_history.append([0, 0])
+        """else:
+            point_history.append([0, 0])"""
 
-        debug_image = draw_point_history(debug_image, point_history)
+        """debug_image = draw_point_history(debug_image, point_history)"""
         debug_image = draw_info(debug_image, fps, mode, number)
 
         # Screen reflection #############################################################
@@ -189,8 +191,8 @@ def select_mode(key, mode):
         mode = 0
     if key == 107:  # k
         mode = 1
-    if key == 104:  # h
-        mode = 2
+    """if key == 104:  # h
+        mode = 2"""
     return number, mode
 
 
@@ -286,11 +288,11 @@ def logging_csv(number, mode, landmark_list, point_history_list):
         with open(csv_path, 'a', newline="") as f:
             writer = csv.writer(f)
             writer.writerow([number, *landmark_list])
-    if mode == 2 and (0 <= number <= 9):
+    """if mode == 2 and (0 <= number <= 9):
         csv_path = 'model/point_history_classifier/point_history.csv'
         with open(csv_path, 'a', newline="") as f:
             writer = csv.writer(f)
-            writer.writerow([number, *point_history_list])
+            writer.writerow([number, *point_history_list])"""
     return
 
 
@@ -512,13 +514,13 @@ def draw_info_text(image, brect, handedness, hand_sign_text,
     return image
 
 
-def draw_point_history(image, point_history):
-    for index, point in enumerate(point_history):
-        if point[0] != 0 and point[1] != 0:
-            cv.circle(image, (point[0], point[1]), 1 + int(index / 2),
-                      (152, 251, 152), 2)
+# def draw_point_history(image, point_history):
+#     for index, point in enumerate(point_history):
+#         if point[0] != 0 and point[1] != 0:
+#             cv.circle(image, (point[0], point[1]), 1 + int(index / 2),
+#                       (152, 251, 152), 2)
 
-    return image
+#     return image
 
 
 def draw_info(image, fps, mode, number):
@@ -527,7 +529,7 @@ def draw_info(image, fps, mode, number):
     cv.putText(image, "FPS:" + str(fps), (10, 30), cv.FONT_HERSHEY_SIMPLEX,
                1.0, (255, 255, 255), 2, cv.LINE_AA)
 
-    mode_string = ['Logging Key Point', 'Logging Point History']
+    mode_string = ['Logging Key Point']
     if 1 <= mode <= 2:
         cv.putText(image, "MODE:" + mode_string[mode - 1], (10, 90),
                    cv.FONT_HERSHEY_SIMPLEX, 0.6, (255, 255, 255), 1,
