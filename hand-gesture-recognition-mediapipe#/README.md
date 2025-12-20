@@ -7,7 +7,7 @@
 cd "hand-gesture-recognition-mediapipe#"
 ```
 
-2) (Recommended) Create and activate a Python virtual environment (PowerShell)
+2) (Optional) Create and activate a Python virtual environment (PowerShell)
 
 ```
 Requires Python 3.12.12
@@ -23,6 +23,11 @@ conda env create -f environment.yml -n ASL
 conda activate ASL
 ```
 
+4) Run command to start
+
+```
+python .\app.py
+```
 
 Notes:
 - Run conda commands in Anaconda Prompt if `conda` is not initialized in PowerShell.
