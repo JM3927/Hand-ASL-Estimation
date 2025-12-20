@@ -53,7 +53,6 @@ dependencies:
       - namex==0.1.0
       - numpy==1.26.4
       - opencv-contrib-python==4.11.0.86
-      - opencv-python==4.12.0.88
       - opt-einsum==3.4.0
       - optree==0.18.0
       - packaging==25.0
