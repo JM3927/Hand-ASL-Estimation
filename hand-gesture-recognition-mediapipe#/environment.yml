@@ -1,7 +1,10 @@
 name: ASL
 channels:
-  - defaults
+  - conda-forge
 dependencies:
+  - python=3.12.12
+  - pip=25.0
+  - setuptools=80.9.0
   - bzip2=1.0.8
   - ca-certificates=2025.12.2
   - expat=2.7.3
@@ -76,4 +79,3 @@ dependencies:
       - urllib3==2.6.2
       - werkzeug==3.1.4
       - wrapt==2.0.1
-prefix: C:\Users\Jay\anaconda3\envs\ASL
