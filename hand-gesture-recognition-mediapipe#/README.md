@@ -10,12 +10,13 @@ cd "hand-gesture-recognition-mediapipe#"
 2) (Recommended) Create and activate a Python virtual environment (PowerShell)
 
 ```
+Requires Python 3.12.12
 python -m venv venv
 .\venv\Scripts\Activate.ps1
 pip install -r requirements.txt
 ```
 
-3) (Optional) Recreate the environment using conda from `environment.yml` (if provided)
+3) (Recommended) Recreate the environment using conda from `environment.yml` (if provided)
 
 ```
 conda env create -f environment.yml -n ASL
